@@ -28,3 +28,5 @@ After running, you can stop the Docker container with
 After running docker-compose up run following command
 
 `$ npm run start:dev`
+
+## Open http://localhost:3021/swagger-api/ to test application
