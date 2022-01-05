@@ -1,6 +1,8 @@
 import { Controller, Post, Body, Res, HttpStatus } from "@nestjs/common";
 import { ForgotPasswordService } from "../forgot-password/forgot-password.service";
 import { ForgotPasswordDto } from "./dto/forgot-password.dto";
+import * as bcrypt from 'bcrypt';
+
 
 @Controller("auth/forgot-password")
 export class ForgotPasswordController {
@@ -12,11 +14,15 @@ export class ForgotPasswordController {
     @Body() forgotPasswordDto: ForgotPasswordDto
   ): Promise<any> {
     try {
-      await this.forgotPasswordService.forgotPassword(forgotPasswordDto);
+      const pass = await this.forgotPasswordService.forgotPassword(forgotPasswordDto);
 
       return res.status(HttpStatus.OK).json({
         message: "Request Reset Password Successfully!",
         status: 200,
+        data: {
+          message: "For Console purpose",
+          password: pass
+        }
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({

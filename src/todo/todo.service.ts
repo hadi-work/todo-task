@@ -20,7 +20,7 @@ export class TodoService {
     });
   }
 
-  create(todo: Todo) {
+  create(todo) {
     this.todoRepository.save(todo);
   }
 

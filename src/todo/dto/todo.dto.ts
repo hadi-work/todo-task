@@ -1,24 +1,17 @@
 import { MaxLength, IsNotEmpty, IsEmail, IsString } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserDto {
-  @IsString()
-  @MaxLength(30)
-  @ApiProperty()
-  readonly name: string;
-
-  @IsString()
-  @MaxLength(40)
-  @ApiProperty()
-  readonly username: string;
-
-  @IsEmail()
-  @ApiProperty()
-  readonly email: string;
+export class TodoDto {
 
   @IsNotEmpty()
   @IsString()
   @MaxLength(60)
   @ApiProperty()
-  password: string;
+  title: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(60)
+  @ApiProperty()
+  description: string;
 }

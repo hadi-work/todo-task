@@ -2,8 +2,11 @@ import { Body, Controller, Get, Post, Put, Delete, Param, Res, Request, UseGuard
 import { TodoService } from './todo.service';
 import { AuthGuard } from "@nestjs/passport";
 import {Req} from "@nestjs/common/decorators/http/route-params.decorator";
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { TodoDto } from './dto/todo.dto';
 
 @UseGuards(AuthGuard("jwt"))
+@ApiBearerAuth()
 @Controller('todo')
 export class TodoController {
 
@@ -26,7 +29,7 @@ export class TodoController {
   }
 
   @Post('/create')
-  createTodo(@Body() body, @Res() res, @Req() req) {
+  createTodo(@Body() body: TodoDto, @Res() res, @Req() req) {
     if (!body.title) {
       res.status(422).send({
         code: 422,
@@ -64,7 +67,7 @@ export class TodoController {
   }
 
   @Put(':id')
-  update(@Param('id') id, @Body() body, @Res() res, @Req() req) {
+  update(@Param('id') id: number, @Body() body: TodoDto, @Res() res, @Req() req): Promise<any>  {
     if (!body.title) {
       res.status(422).send({
         code: 422,
@@ -97,8 +100,8 @@ export class TodoController {
     }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id, @Res() res, @Req() req) {
+  @Delete('/:id')
+  remove(@Param('id') id:number, @Res() res, @Req() req) {
     try {
       this.todoService.remove(id, req.user.id);
       res.status(200).send({

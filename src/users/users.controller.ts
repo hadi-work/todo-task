@@ -13,8 +13,10 @@ import { UsersService } from "./users.service";
 import { AuthGuard } from "@nestjs/passport";
 import { UserProfileDto } from "./dto/user-profile.dto";
 import { IUsers } from "./interfaces/users.interface";
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard("jwt"))
+@ApiBearerAuth()
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

@@ -9,8 +9,10 @@ import {
 import { ChangePasswordService } from '../change-password/change-password.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 @Controller('auth/change-password')
 export class ChangePasswordController {
   constructor(private readonly changePasswordService: ChangePasswordService) {}

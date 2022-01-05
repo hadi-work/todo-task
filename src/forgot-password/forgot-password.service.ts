@@ -22,6 +22,7 @@ export class ForgotPasswordService {
       .toString(36)
       .slice(-8);
     userUpdate.password = bcrypt.hashSync(passwordRand, 8);
-    return await this.userRepository.save(userUpdate);
+    await this.userRepository.save(userUpdate);
+    return passwordRand;
   }
 }
