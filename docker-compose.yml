@@ -1,21 +1,9 @@
-version: '2'
+version: '2.1'
 services:
   data:
     image: busybox
     volumes:
       - ./docker/misc/data:/var/lib/mysql
-
-  web:
-    build: docker/web
-    container_name: web
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./:/var/www/apps
-    working_dir: /var/www/apps
-    command: [sh, -c, npm install]
-    networks:
-      - todo-net
 
   mysql:
     build: docker/mysql
@@ -27,9 +15,30 @@ services:
       MYSQL_PASSWORD: todopass
     ports:
       - "13306:13306"
+    healthcheck:
+      test: "/usr/bin/mysql --user=todouser --password=todopass --execute \"SHOW DATABASES;\""
+#      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+#      timeout: 20s
+#      retries: 10
     volumes_from:
       - data
     container_name: mysql
+    networks:
+      - todo-net
+
+  web:
+    build: docker/web
+    depends_on:
+      mysql:
+        condition: service_healthy
+    container_name: web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/var/www/apps
+    working_dir: /var/www/apps
+    command: [sh, -c, npm install]
+    command: npm run start:dev
     networks:
       - todo-net
 
